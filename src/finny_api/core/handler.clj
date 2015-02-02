@@ -20,7 +20,7 @@
      (OPTIONS "/" [] {:status 200
                       :headers {"Allow" "OPTIONS"
                                 "Content-Type" "application/hal+json; charset=utf-8"}
-                      :body {:version "0.1.0-SNAPSHOT"}})
+                      :body (json/generate-string {:version "0.1.0-SNAPSHOT"})})
      (ANY "/" [] {:status 405
                   :headers {"Allow" "OPTIONS"
                             "Content-Type" "application/hal+json; charset=utf-8"}}))
