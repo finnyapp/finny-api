@@ -1,13 +1,16 @@
 (ns finny-api.core.handler
   (:require [finny-api.hal.links :refer [wrap-hal-links]]
+            [finny-api.core.middleware :refer :all]
             [compojure.core :refer :all]
             [compojure.route :as route]
             [cheshire.core :as json]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [ring.util.response :refer [response]]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [clojure.tools.logging :as log]))
 
-(defn a-quote [] {:message "Hello, world!"})
+(defn a-quote [] 
+  {:message "Hello, world!"})
 
 (defn json-response [data request & [status]]
   {:status  (or status 200)
@@ -28,4 +31,4 @@
   (ANY "*" [] (route/not-found "Not Found")))
 
 (def app
-  (wrap-json-response (wrap-json-body app-routes {:keywords? true :bigdecimals? true})))
+  (wrap-response-logger (wrap-request-logger (wrap-json-response (wrap-json-body app-routes {:keywords? true :bigdecimals? true})))))
