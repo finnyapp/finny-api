@@ -31,4 +31,4 @@
   (ANY "*" [] (route/not-found "Not Found")))
 
 (def app
-  (wrap-response-logger (wrap-request-logger (wrap-json-response (wrap-json-body app-routes {:keywords? true :bigdecimals? true})))))
+  (wrap-response-logger (wrap-exception-handler (wrap-request-logger (wrap-json-response (wrap-json-body app-routes {:keywords? true :bigdecimals? true}))))))
