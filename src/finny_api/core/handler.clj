@@ -1,5 +1,6 @@
 (ns finny-api.core.handler
   (:require [finny-api.hal.links :refer [wrap-hal-links]]
+            [finny-api.core.transactions :refer :all]
             [finny-api.core.middleware :refer :all]
             [compojure.core :refer :all]
             [compojure.route :as route]
@@ -9,17 +10,21 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [clojure.tools.logging :as log]))
 
-(defn a-quote [] 
-  {:message "Hello, world!"})
-
 (defn json-response [data request & [status]]
   {:status  (or status 200)
    :headers {"Content-Type" "application/hal+json; charset=utf-8"}
    :body    (json/generate-string (wrap-hal-links data request))})
 
+(defn a-quote [] 
+  {:message "Hello, world!"})
+
+(defn response-to-create-transaction [request]
+  (let [transaction (get-in request [:body])]
+    (json-response (create-transaction transaction) request)))
+
 (defroutes app-routes
   (GET "/" request (json-response (a-quote) request))
-  (POST "/transaction" request (json-response (get-in request [:body]) request))
+  (POST "/transaction" request (response-to-create-transaction request))
   (OPTIONS "/" [] {:status 200
                    :headers {"Allow" "OPTIONS"
                              "Content-Type" "application/hal+json; charset=utf-8"}
