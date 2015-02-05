@@ -5,12 +5,8 @@
             [cheshire.core :refer :all]))
 
 (deftest test-app
-  (testing "api GET"
-    (let [response (app (mock/request :get "/api"))]
-      (is (= (:status response) 405))
-      (is (empty? (:body response)))))
   (testing "api OPTIONS"
-    (let [response (app (mock/request :options "/api"))]
+    (let [response (app (mock/request :options "/"))]
       (is (= (:status response) 200))
       (is (.contains (:body response) "version"))))
   (testing "not-found route"

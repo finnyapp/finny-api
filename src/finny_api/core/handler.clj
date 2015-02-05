@@ -19,15 +19,14 @@
 
 (defroutes app-routes
   (GET "/" request (json-response (a-quote) request))
-  (context "/api" []
-     (OPTIONS "/" [] {:status 200
-                      :headers {"Allow" "OPTIONS"
-                                "Content-Type" "application/hal+json; charset=utf-8"}
-                      :body (json/generate-string {:version "0.1.0-SNAPSHOT"})})
-     (ANY "/" [] {:status 405
-                  :headers {"Allow" "OPTIONS"
-                            "Content-Type" "application/hal+json; charset=utf-8"}}))
-  (POST "/" request (json-response (get-in request [:body]) request))
+  (POST "/transaction" request (json-response (get-in request [:body]) request))
+  (OPTIONS "/" [] {:status 200
+                   :headers {"Allow" "OPTIONS"
+                             "Content-Type" "application/hal+json; charset=utf-8"}
+                   :body (json/generate-string {:version "0.1.0-SNAPSHOT"})})
+  (ANY "/" [] {:status 405
+               :headers {"Allow" "OPTIONS"
+                         "Content-Type" "application/hal+json; charset=utf-8"}})
   (ANY "*" [] (route/not-found "Not Found")))
 
 (def app
