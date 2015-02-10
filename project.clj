@@ -11,6 +11,7 @@
                  [postgresql "9.1-901.jdbc4"]
                  [org.clojure/tools.logging "0.3.1"]
                  [org.slf4j/slf4j-log4j12 "1.7.7"]
+                 [korma "0.4.0"]
                  [lobos "1.0.0-beta3"]
                  [postgresql "9.1-901.jdbc4"]
                  [log4j/log4j "1.2.17" :exclusions  [javax.mail/mail

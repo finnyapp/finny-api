@@ -1,4 +1,5 @@
 (ns finny-api.db.config
+  (:require [korma.db :as korma])
   (:refer-clojure :exclude [replace reverse])
   (:use [clojure.string :as str])
   (:import (java.net URI)))
@@ -19,8 +20,10 @@
            :ssl "true"
            :sslfactory "org.postgresql.ssl.NonValidatingFactory"})))))
 
-(def db
+(def db-connection-info
   (merge {:classname "org.postgresql.Driver"
           :subprotocol "postgresql"
           :subname "//localhost:5432/finny"}
          (heroku-db)))
+
+(korma/defdb db db-connection-info)
