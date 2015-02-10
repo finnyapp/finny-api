@@ -1,4 +1,4 @@
-(ns finny-api.core.db
+(ns finny-api.db.migration
   (:use lobos.core))
 
 (defn db-rollforward []
