@@ -28,6 +28,11 @@
 (defn response-to-get-transactions [request]
   (json-response {:transactions (get-transactions)} request))
 
+(defn response-to-update-transaction [request]
+  (let [id (get-in request [:params :id])
+        transaction (get-in request [:body])]
+    (json-response (update-transaction id transaction) request)))
+
 (defn response-to-delete-transaction [request]
   (delete-transaction (get-in request [:params :id]))
   (json-response {} request))
@@ -37,6 +42,7 @@
   (GET "/transactions/total" request (response-to-get-transactions-total request))
   (GET "/transactions" request (response-to-get-transactions request))
   (POST "/transaction" request (response-to-create-transaction request))
+  (PUT "/transaction/:id" request (response-to-update-transaction request))
   (DELETE "/transaction/:id" request (response-to-delete-transaction request))
   (OPTIONS "/" [] {:status 200
                    :headers {"Allow" "OPTIONS"

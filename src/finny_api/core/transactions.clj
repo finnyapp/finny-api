@@ -7,7 +7,7 @@
 
 (defn create-transaction [transaction]
   (let [record (select-keys transaction [:value :comments])]
-    (log/debug "Creating transaction with " record)
+    (log/debug "Creating transaction with" record)
     (insert transactions
             (values record))
     transaction))
@@ -19,6 +19,14 @@
 (defn get-transactions []
   (log/debug "Getting all transactions")
   (select transactions))
+
+(defn update-transaction [id transaction]
+  (let [record (select-keys transaction [:value :comments])]
+   (log/debug "Updating transaction with id" id "with" record)
+   (update transactions
+           (set-fields record)
+           (where {:id [= (Integer. id)]}))
+   transaction))
 
 (defn delete-transaction [id]
   (log/debug "Deleting transaction with id" id)
