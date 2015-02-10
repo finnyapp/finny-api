@@ -16,6 +16,11 @@
   (log/debug "Getting total of transactions")
   (reduce + (map #(bigdec (get % :value)) (select transactions))))
 
+(defn get-transaction [id]
+  (log/debug "Getting transaction with id" id)
+  (first (select transactions
+           (where {:id [= (Integer. id)]}))))
+
 (defn get-transactions []
   (log/debug "Getting all transactions")
   (select transactions))
