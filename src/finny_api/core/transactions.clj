@@ -19,3 +19,8 @@
 (defn get-transactions []
   (log/debug "Getting all transactions")
   (select transactions))
+
+(defn delete-transaction [id]
+  (log/debug "Deleting transaction with id" id)
+  (delete transactions
+          (where {:id [= (Integer. id)]})))

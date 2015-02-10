@@ -28,11 +28,16 @@
 (defn response-to-get-transactions [request]
   (json-response {:transactions (get-transactions)} request))
 
+(defn response-to-delete-transaction [request]
+  (delete-transaction (get-in request [:params :id]))
+  (json-response {} request))
+
 (defroutes app-routes
   (GET "/" request (json-response (a-quote) request))
   (GET "/transactions/total" request (response-to-get-transactions-total request))
   (GET "/transactions" request (response-to-get-transactions request))
   (POST "/transaction" request (response-to-create-transaction request))
+  (DELETE "/transaction/:id" request (response-to-delete-transaction request))
   (OPTIONS "/" [] {:status 200
                    :headers {"Allow" "OPTIONS"
                              "Content-Type" "application/hal+json; charset=utf-8"}
