@@ -22,8 +22,12 @@
   (let [transaction (get-in request [:body])]
     (json-response (create-transaction transaction) request)))
 
+(defn response-to-get-transactions [request]
+  (json-response {:transactions (get-transactions)} request))
+
 (defroutes app-routes
   (GET "/" request (json-response (a-quote) request))
+  (GET "/transactions" request (response-to-get-transactions request))
   (POST "/transaction" request (response-to-create-transaction request))
   (OPTIONS "/" [] {:status 200
                    :headers {"Allow" "OPTIONS"

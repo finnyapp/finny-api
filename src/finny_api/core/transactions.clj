@@ -7,7 +7,11 @@
 
 (defn create-transaction [transaction]
   (let [record (select-keys transaction [:value :comments])]
-   (log/debug "Creating transaction with " record)
-   (insert transactions
-           (values record))
-   transaction))
+    (log/debug "Creating transaction with " record)
+    (insert transactions
+            (values record))
+    transaction))
+
+(defn get-transactions []
+  (log/debug "Getting all transactions")
+  (select transactions))
