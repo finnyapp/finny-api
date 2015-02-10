@@ -12,6 +12,10 @@
             (values record))
     transaction))
 
+(defn get-transactions-total []
+  (log/debug "Getting total of transactions")
+  (reduce + (map #(bigdec (get % :value)) (select transactions))))
+
 (defn get-transactions []
   (log/debug "Getting all transactions")
   (select transactions))
