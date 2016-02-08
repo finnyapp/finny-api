@@ -18,7 +18,8 @@
                                                      com.sun.jmdk/jmxtools
                                                      com.sun.jmx/jmxri]]]
   :plugins [[lein-ring "0.9.7"]
-            [lein-midje "3.2"]]
+            [lein-midje "3.2"]
+            [lein-cloverage "1.0.6"]]
   :ring {:handler finny-api.core.handler/app}
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring/ring-mock "0.3.0"]
