@@ -2,4 +2,5 @@
   (:use [finny-api.db.config :as finny-db]
         lobos.connectivity))
 
-(open-global finny-db/db-connection-info)
+(when (not (= (System/getenv "FINNY_ENV") "test"))
+        (open-global finny-db/db-connection-info))
