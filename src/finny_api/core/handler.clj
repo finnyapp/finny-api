@@ -1,6 +1,6 @@
 (ns finny-api.core.handler
   (:require [finny-api.hal.links :refer [wrap-hal-links]]
-            [finny-api.core.transactions :refer :all]
+            [finny-api.core.transactions :as transactions]
             [finny-api.core.middleware :refer :all]
             [compojure.core :refer :all]
             [compojure.route :as route]
@@ -20,24 +20,24 @@
 
 (defn response-to-create-transaction [request]
   (let [transaction (get-in request [:body])]
-    (json-response (create-transaction transaction) request)))
+    (json-response (transactions/create-transaction transaction) request)))
 
 (defn response-to-get-transaction [request]
-  (json-response (get-transaction (get-in request [:params :id])) request))
+  (json-response (transactions/get-transaction (get-in request [:params :id])) request))
 
 (defn response-to-get-transactions-total [request]
-  (json-response {:total (get-transactions-total)} request))
+  (json-response {:total (transactions/get-transactions-total)} request))
 
 (defn response-to-get-transactions [request]
-  (json-response {:transactions (get-transactions)} request))
+  (json-response {:transactions (transactions/get-transactions)} request))
 
 (defn response-to-update-transaction [request]
   (let [id (get-in request [:params :id])
         transaction (get-in request [:body])]
-    (json-response (update-transaction id transaction) request)))
+    (json-response (transactions/update-transaction id transaction) request)))
 
 (defn response-to-delete-transaction [request]
-  (delete-transaction (get-in request [:params :id]))
+  (transactions/delete-transaction (get-in request [:params :id]))
   (json-response {} request))
 
 (defroutes app-routes
