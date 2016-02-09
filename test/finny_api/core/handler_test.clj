@@ -28,11 +28,6 @@
         (:status response) => 200
         (:value (parse-string (:body response) true)) => 14))
 
-(defn post-transaction [] (app (mock/content-type
-                                 (mock/body
-                                   (mock/request :post "/transaction")
-                                   (generate-string {:value 10}))
-                                 "application/json")))
 (fact "Creates a transaction"
       (against-background (transactions/create-transaction {:value 10}) => {:value 10})
       (let [response (app (mock/content-type
@@ -42,6 +37,22 @@
                                  "application/json"))]
         (:status response) => 201
         (:value (parse-string (:body response) true)) => 10))
+
+(fact "Updates a transaction"
+      (against-background (transactions/update-transaction "9" {:value 999}) => {:value 999})
+      (let [response (app (mock/content-type
+                            (mock/body
+                              (mock/request :put "/transaction/9")
+                              (generate-string {:value 999}))
+                            "application/json"))]
+        (:status response) => 200
+        (:value (parse-string (:body response) true)) => 999))
+
+(fact "Deletes a transaction"
+      (against-background (transactions/delete-transaction "21") => {})
+      (let [response (app (mock/request :delete "/transaction/21"))]
+        (:status response) => 200
+        (empty? (get-in response [:body :value])) => true))
 
 (fact "OPTIONS is available"
       (let [response (app (mock/request :options "/"))]
