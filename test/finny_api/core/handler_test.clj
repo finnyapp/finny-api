@@ -5,42 +5,54 @@
             [finny-api.core.handler :refer :all]
             [cheshire.core :refer :all]))
 
-(defn get-root [] (app (mock/request :get "/")))
 (fact "Root is a `Hello, world!` message"
-      (:status (get-root)) => 200
-      (get-in (parse-string (:body (get-root)) true) [:message]) => "Hello, world!")
+      (let [response (app (mock/request :get "/"))]
+        (:status response) => 200
+        (get-in (parse-string (:body response) true) [:message]) => "Hello, world!"))
 
-(defn get-transactions-total [] (app (mock/request :get "/transactions/total")))
 (fact "Gets the total value of transactions"
-      (:status (get-transactions-total)) => 200
-      (:total (parse-string (:body (get-transactions-total)) true)) => 5
-      (provided
-        (transactions/get-transactions-total) => 5))
+      (against-background (transactions/get-transactions-total) => 5)
+      (let [response (app (mock/request :get "/transactions/total"))]
+        (:status response) => 200
+        (:total (parse-string (:body response) true)) => 5))
 
-(defn get-transactions [] (app (mock/request :get "/transactions")))
 (fact "Gets all transactions"
-      (:status (get-transactions)) => 200
-      (:transactions (parse-string (:body (get-transactions)) true)) => [{:value 1} {:value 2}]
-      (provided
-        (transactions/get-transactions) => [{:value 1} {:value 2}]))
+      (against-background (transactions/get-transactions) => [{:value 1} {:value 2}])
+      (let [response (app (mock/request :get "/transactions"))]
+        (:status response) => 200
+        (:transactions (parse-string (:body response) true)) => [{:value 1} {:value 2}]))
 
-(defn get-transaction [] (app (mock/request :get "/transaction/7")))
 (fact "Gets transaction"
-      (:status (get-transaction)) => 200
-      (:value (parse-string (:body (get-transaction)) true)) => 14
-      (provided
-        (transactions/get-transaction "7") => {:value 14}))
+      (against-background (transactions/get-transaction "7") => {:value 14})
+      (let [response (app (mock/request :get "/transaction/7"))]
+        (:status response) => 200
+        (:value (parse-string (:body response) true)) => 14))
 
-(defn options [] (app (mock/request :options "/")))
+(defn post-transaction [] (app (mock/content-type
+                                 (mock/body
+                                   (mock/request :post "/transaction")
+                                   (generate-string {:value 10}))
+                                 "application/json")))
+(fact "Creates a transaction"
+      (against-background (transactions/create-transaction {:value 10}) => {:value 10})
+      (let [response (app (mock/content-type
+                                 (mock/body
+                                   (mock/request :post "/transaction")
+                                   (generate-string {:value 10}))
+                                 "application/json"))]
+        (:status response) => 201
+        (:value (parse-string (:body response) true)) => 10))
+
 (fact "OPTIONS is available"
-      (:status (options)) => 200
-      (.contains (:body (options)) "version") => true)
+      (let [response (app (mock/request :options "/"))]
+        (:status response) => 200
+        (.contains (:body response) "version") => true))
 
-(defn get-invalid-route [] (app (mock/request :get "/invalid-route")))
 (fact "An invalid route 404s"
-      (:status (get-invalid-route)) => 404
-      (.contains (:body (get-invalid-route)) "Not Found") => true)
+      (let [response (app (mock/request :get "/invalid-route"))]
+        (:status response) => 404
+        (.contains (:body response) "Not Found") => true))
 
-(defn post-to-root [] (app (mock/request :post "/")))
 (fact "POSTing to root gives you nothing"
-      (:status (post-to-root)) => 405)
+      (let [response (app (mock/request :post "/"))]
+        (:status response) => 405))

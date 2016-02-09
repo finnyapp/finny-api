@@ -20,7 +20,7 @@
 
 (defn response-to-create-transaction [request]
   (let [transaction (get-in request [:body])]
-    (json-response (transactions/create-transaction transaction) request)))
+    (json-response (transactions/create-transaction transaction) request 201)))
 
 (defn response-to-get-transaction [request]
   (json-response (transactions/get-transaction (get-in request [:params :id])) request))
