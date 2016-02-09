@@ -20,7 +20,8 @@
       (.contains (:body (options)) "version") => true)
 
 (fact "An invalid route 404s"
-      (:status (get-invalid-route)) => 404)
+      (:status (get-invalid-route)) => 404
+      (.contains (:body (get-invalid-route)) "Not Found") => true)
 
 (fact "Root is a `Hello, world!` message"
       (:status (get-root)) => 200
