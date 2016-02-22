@@ -11,13 +11,13 @@
         (get-in (parse-string (:body response) true) [:message]) => "Hello, world!"))
 
 (fact "Gets the total value of transactions"
-      (against-background (transactions/get-transactions-total) => 5)
+      (against-background (transactions/total-value-of-transactions) => 5)
       (let [response (app (mock/request :get "/transactions/total"))]
         (:status response) => 200
         (:total (parse-string (:body response) true)) => 5))
 
 (fact "Gets all transactions"
-      (against-background (transactions/get-transactions) => [{:value 1} {:value 2}])
+      (against-background (transactions/all-transactions) => [{:value 1} {:value 2}])
       (let [response (app (mock/request :get "/transactions"))]
         (:status response) => 200
         (:transactions (parse-string (:body response) true)) => [{:value 1} {:value 2}]))

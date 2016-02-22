@@ -1,33 +1,38 @@
-(ns finny-api.core.transactions
-  (:require [finny-api.db.transactions :as db]
-            [clojure.tools.logging :as log]))
+(ns finny-api.db.transactions
+  (:require [finny-api.db.config]
+            [clojure.tools.logging :as log]
+            [korma.core :refer :all]))
+
+(defentity transactions)
 
 (defn create-transaction [transaction]
   (let [record (select-keys transaction [:value :comments])]
     (log/debug "Creating transaction with" record)
-    (db/create-transaction record)
-    record))
+    (insert transactions
+            (values record))
+    transaction))
 
 (defn total-value-of-transactions []
   (log/debug "Getting total of transactions")
-  (db/total-value-of-transactions))
+  (reduce + (map #(bigdec (get % :value)) (select transactions))))
 
 (defn get-transaction [id]
   (log/debug "Getting transaction with id" id)
-  (or (db/get-transaction id)
-      {}))
+  (first (select transactions
+           (where {:id [= (Integer. id)]}))))
 
 (defn all-transactions []
   (log/debug "Getting all transactions")
-  (db/all-transactions))
+  (select transactions))
 
 (defn update-transaction [id transaction]
   (let [record (select-keys transaction [:value :comments])]
    (log/debug "Updating transaction with id" id "with" record)
-   (db/update-transaction id transaction)
-   transaction))
+   (update transactions
+           (set-fields record)
+           (where {:id [= (Integer. id)]}))))
 
 (defn delete-transaction [id]
   (log/debug "Deleting transaction with id" id)
-  (db/delete-transaction id)
-  :deleted)
+  (delete transactions
+          (where {:id [= (Integer. id)]})))

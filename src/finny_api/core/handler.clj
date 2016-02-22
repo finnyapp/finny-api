@@ -26,10 +26,10 @@
   (json-response (transactions/get-transaction (get-in request [:params :id])) request))
 
 (defn response-to-get-transactions-total [request]
-  (json-response {:total (transactions/get-transactions-total)} request))
+  (json-response {:total (transactions/total-value-of-transactions)} request))
 
 (defn response-to-get-transactions [request]
-  (json-response {:transactions (transactions/get-transactions)} request))
+  (json-response {:transactions (transactions/all-transactions)} request))
 
 (defn response-to-update-transaction [request]
   (let [id (get-in request [:params :id])
