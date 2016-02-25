@@ -26,4 +26,4 @@
           :subname "//localhost:5432/finny"}
          (heroku-db)))
 
-(korma/defdb db db-connection-info)
+(korma/defdb finny-api-db db-connection-info)

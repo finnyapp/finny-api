@@ -19,7 +19,8 @@
                                                      com.sun.jmx/jmxri]]]
   :plugins [[lein-ring "0.9.7"]
             [lein-midje "3.2"]
-            [lein-cloverage "1.0.6"]]
+            [lein-cloverage "1.0.6"]
+            [org.clojars.edtsech/lein-lobos "1.0.0-beta1"]]
   :ring {:handler finny-api.core.handler/app}
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring/ring-mock "0.3.0"]
