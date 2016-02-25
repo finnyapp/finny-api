@@ -3,6 +3,6 @@
         lobos.connectivity))
 
 (when (not (= (System/getenv "FINNY_ENV") "test"))
-        (open-global finny-db/db-connection-info))
+        (with-connection finny-db/db-connection-info))
 
 (def db finny-db/db-connection-info)
