@@ -3,14 +3,14 @@
   :url "http://example.com/FIXME"
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [compojure "1.4.0"]
+                 [compojure "1.5.0"]
                  [ring/ring-defaults "0.1.5"]
                  [ring/ring-json "0.4.0"]
                  [org.clojure/java.jdbc "0.4.2"]
                  [cheshire "5.5.0"]
                  [postgresql "9.3-1102.jdbc41"]
                  [org.clojure/tools.logging "0.3.1"]
-                 [org.slf4j/slf4j-log4j12 "1.7.14"]
+                 [org.slf4j/slf4j-log4j12 "1.7.18"]
                  [korma "0.4.2"]
                  [lobos "1.0.0-beta3"]
                  [log4j/log4j "1.2.17" :exclusions  [javax.mail/mail
