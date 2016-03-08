@@ -8,12 +8,12 @@
 
 ### Building
 
-    docker build -t finny-api .
+    docker build -t finny/finny-api .
 
 ### Running the app
 
-    docker run -p 3000:3000 -e DATABASE_URL= -it --rm --name finny-api finny-api
+    docker run -p 3000:3000 -e DATABASE_URL= -it --rm --name finny-api finny/finny-api
 
 ### Testing
 
-    docker run -e FINNY_ENV=test -t --rm --name finny-api finny-api lein midje
+    docker run -e FINNY_ENV=test -t --rm --name finny-api finny/finny-api lein midje
