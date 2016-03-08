@@ -4,10 +4,16 @@
 [![Stories in Ready](https://badge.waffle.io/gregoriomelo/finny-api.png?label=ready&title=Ready)](https://waffle.io/gregoriomelo/finny-api)
 [![Dependencies Status](https://jarkeeper.com/gregoriomelo/finny-api/status.svg)](https://jarkeeper.com/gregoriomelo/finny-api)
 
-## Building with Docker
+## Stuff with Docker
+
+### Building
 
     docker build -t finny-api .
 
-## Running with Docker
+### Running the app
 
     docker run -p 3000:3000 -e DATABASE_URL= -it --rm --name finny-api finny-api
+
+### Testing
+
+    docker run -e FINNY_ENV=test -t --rm --name finny-api finny-api lein midje
