@@ -20,6 +20,18 @@ To start the app up, run this:
 
     DATABASE_URL="postgres://username:password@hostname:5432/finny" lein ring server-headless
 
+## Usage
+
+### Creating a transaction
+
+In order to create a transaction with 7 as its value, run:
+
+    curl -XPOST finny-api.herokuapp.com/transaction -d '{"value": 7}' -H "Content-Type: application/json"
+
+### Getting all transactions
+
+    curl localhost:3000/transactions -H "Content-Type: application/json"
+
 ## Testing
 
 ### Running the tests
