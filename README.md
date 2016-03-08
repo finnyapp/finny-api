@@ -4,6 +4,40 @@
 [![Stories in Ready](https://badge.waffle.io/gregoriomelo/finny-api.png?label=ready&title=Ready)](https://waffle.io/gregoriomelo/finny-api)
 [![Dependencies Status](https://jarkeeper.com/gregoriomelo/finny-api/status.svg)](https://jarkeeper.com/gregoriomelo/finny-api)
 
+## Running the app
+
+In order to run the app, you need to setup a PostgreSQL instance, with a database named `finny`.
+
+### Applying the database migrations
+
+Run the database migrations:
+
+    DATABASE_URL="postgres://username:password@hostname:5432/finny" lein lobos migrate
+
+### Starting it up
+
+To start the app up, run this:
+
+    DATABASE_URL="postgres://username:password@hostname:5432/finny" lein ring server-headless
+
+## Testing
+
+### Running the tests
+
+    FINNY_ENV=test lein midje
+
+or, with autotest on:
+
+    FINNY_ENV=test lein midje :autotest
+
+## Checking the coverage
+
+    FINNY_ENV=test lein cloverage
+
+## Deployment
+
+You should be able to just deploy the app to Heroku. Make sure you run the database migrations.
+
 ## Stuff with Docker
 
 ### Building
