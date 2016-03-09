@@ -4,7 +4,7 @@
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [compojure "1.5.0"]
-                 [ring/ring-defaults "0.1.5"]
+                 [ring/ring-defaults "0.2.0"]
                  [ring/ring-json "0.4.0"]
                  [org.clojure/java.jdbc "0.4.2"]
                  [cheshire "5.5.0"]
