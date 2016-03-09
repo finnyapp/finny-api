@@ -4,6 +4,10 @@
 [![Stories in Ready](https://badge.waffle.io/gregoriomelo/finny-api.png?label=ready&title=Ready)](https://waffle.io/gregoriomelo/finny-api)
 [![Dependencies Status](https://jarkeeper.com/gregoriomelo/finny-api/status.svg)](https://jarkeeper.com/gregoriomelo/finny-api)
 
+## Code of conduct
+
+[Here](CODE_OF_CONDUCT.md)
+
 ## Running the app
 
 In order to run the app, you need to setup a PostgreSQL instance, with a database named `finny`.
