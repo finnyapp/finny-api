@@ -17,6 +17,10 @@
   (or (db/get-transaction id)
       {}))
 
+(defn get-transactions-by-category [category]
+  (log/debug "Getting transacations with category" category)
+  (db/get-transactions-by-category category))
+
 (defn all-transactions []
   (log/debug "Getting all transactions")
   (db/all-transactions))

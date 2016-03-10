@@ -21,6 +21,9 @@
   (first (select transactions
            (where {:id [= (Integer. id)]}))))
 
+(defn get-transactions-by-category [category]
+  (select transactions (where {:category [= category]})))
+
 (defn all-transactions []
   (log/debug "Getting all transactions")
   (select transactions))
