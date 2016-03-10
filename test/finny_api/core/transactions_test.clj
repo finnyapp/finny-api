@@ -4,9 +4,9 @@
             [finny-api.db.transactions :as db]))
 
 (fact "Stores transaction in db with known fields"
-      (against-background (db/create-transaction {:value 7 :comments "Blah"}) => true)
-      (let [stored-transaction (transactions/create-transaction {:value 7 :comments "Blah" :useless-field true})]
-        stored-transaction => {:value 7 :comments "Blah"}))
+      (against-background (db/create-transaction {:value 7 :comments "Blah" :category "Entertainment"}) => true)
+      (let [stored-transaction (transactions/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :useless-field true})]
+        stored-transaction => {:value 7 :comments "Blah" :category "Entertainment"}))
 
 (fact "Gets the total value of transactions from db"
       (against-background (db/total-value-of-transactions) => 27)
@@ -27,9 +27,9 @@
         all-transactions => [{:value 1 :comments "um"} {:value 2 :comments "dois"}]))
 
 (fact "Updates a transaction in the db"
-      (against-background (db/update-transaction 8 {:value 80 :comments "8 * 10"}) => 1)
-      (let [updated-transaction (transactions/update-transaction 8 {:value 80 :comments "8 * 10"})]
-        updated-transaction => {:value 80 :comments "8 * 10"}))
+      (against-background (db/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment"}) => 1)
+      (let [updated-transaction (transactions/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment"})]
+        updated-transaction => {:value 80 :comments "8 * 10" :category "Entertainment"}))
 
 (fact "Deletes a transaction in the db"
       (against-background (db/delete-transaction 3) => 1)

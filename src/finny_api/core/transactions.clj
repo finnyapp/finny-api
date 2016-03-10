@@ -3,7 +3,7 @@
             [clojure.tools.logging :as log]))
 
 (defn create-transaction [transaction]
-  (let [record (select-keys transaction [:value :comments])]
+  (let [record (select-keys transaction [:value :comments :category])]
     (log/debug "Creating transaction with" record)
     (db/create-transaction record)
     record))
@@ -22,7 +22,7 @@
   (db/all-transactions))
 
 (defn update-transaction [id transaction]
-  (let [record (select-keys transaction [:value :comments])]
+  (let [record (select-keys transaction [:value :comments :category])]
    (log/debug "Updating transaction with id" id "with" record)
    (db/update-transaction id transaction)
    transaction))

@@ -6,7 +6,7 @@
 (defentity transactions)
 
 (defn create-transaction [transaction]
-  (let [record (select-keys transaction [:value :comments])]
+  (let [record (select-keys transaction [:value :comments :category])]
     (log/debug "Creating transaction with" record)
     (insert transactions
             (values record))
@@ -26,7 +26,7 @@
   (select transactions))
 
 (defn update-transaction [id transaction]
-  (let [record (select-keys transaction [:value :comments])]
+  (let [record (select-keys transaction [:value :comments :category])]
    (log/debug "Updating transaction with id" id "with" record)
    (update transactions
            (set-fields record)

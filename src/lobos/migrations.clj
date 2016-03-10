@@ -12,3 +12,7 @@
             (varchar :comments 255)
             (check :value (> :value 0)))))
   (down [] (drop (table :transactions))))
+
+(defmigration add-category-to-transactions
+  (up [] (alter :add (table :transactions (varchar :category 255))))
+  (down [] (alter :drop (table :transactions (column :category)))))
