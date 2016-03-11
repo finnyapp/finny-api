@@ -35,3 +35,7 @@
       (against-background (db/delete-transaction 3) => 1)
       (let [deleted (transactions/delete-transaction 3)]
         deleted => :deleted))
+
+(fact "Gets transactions by category"
+      (against-background (db/get-transactions-by-category "Entertainment") => [{:value 3 :comments "Nada" :category "Entertainment"}])
+      (transactions/get-transactions-by-category "Entertainment") => [{:value 3 :comments "Nada" :category "Entertainment"}])

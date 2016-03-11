@@ -68,7 +68,7 @@
       (let [response (app (mock/request :post "/"))]
         (:status response) => 405))
 
-(fact "GETs categories by transaction"
+(fact "GETs transactions by categories"
       (against-background (transactions/get-transactions-by-category "Education") => [{:value 1 :category "Education"}])
       (let [response (app (mock/request :get "/transactions/category/Education"))]
         (:status response) => 200
