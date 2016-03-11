@@ -16,3 +16,7 @@
 (defmigration add-category-to-transactions
   (up [] (alter :add (table :transactions (varchar :category 255))))
   (down [] (alter :drop (table :transactions (column :category)))))
+
+(defmigration add-date-to-transactions
+  (up [] (alter :add (table :transactions (date :date))))
+  (down [] (alter :drop (table :transactions (column :date)))))

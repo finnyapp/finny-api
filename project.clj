@@ -13,6 +13,7 @@
                  [org.slf4j/slf4j-log4j12 "1.7.19"]
                  [honeysql "0.6.3"]
                  [lobos "1.0.0-beta3"]
+                 [clj-time "0.11.0"]
                  [log4j/log4j "1.2.17" :exclusions  [javax.mail/mail
                                                      javax.jms/jms
                                                      com.sun.jmdk/jmxtools

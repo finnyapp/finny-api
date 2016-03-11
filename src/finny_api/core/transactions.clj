@@ -1,9 +1,11 @@
 (ns finny-api.core.transactions
   (:require [finny-api.db.transactions :as db]
+            [clj-time.format :as date-formatter]
             [clojure.tools.logging :as log]))
 
 (defn create-transaction [transaction]
-  (let [record (select-keys transaction [:value :comments :category])]
+  (let [transaction-with-formatted-date (update-in transaction [:date] #(date-formatter/parse (date-formatter/formatter "yyyy-MM-dd") %))
+        record (select-keys transaction-with-formatted-date [:value :comments :category :date])]
     (log/debug "Creating transaction with" record)
     (db/create-transaction record)
     record))
@@ -26,10 +28,11 @@
   (db/all-transactions))
 
 (defn update-transaction [id transaction]
-  (let [record (select-keys transaction [:value :comments :category])]
+  (let [transaction-with-formatted-date (update-in transaction [:date] #(date-formatter/parse (date-formatter/formatter "yyyy-MM-dd") %))
+        record (select-keys transaction-with-formatted-date [:value :comments :category :date])]
    (log/debug "Updating transaction with id" id "with" record)
-   (db/update-transaction id transaction)
-   transaction))
+   (db/update-transaction id record)
+   record))
 
 (defn delete-transaction [id]
   (log/debug "Deleting transaction with id" id)

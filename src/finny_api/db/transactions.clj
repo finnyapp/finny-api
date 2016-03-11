@@ -2,6 +2,7 @@
   (:require [finny-api.db.config :refer [db-spec]]
             [clojure.tools.logging :as log]
             [clojure.java.jdbc :as j]
+            [clj-time.coerce :as coercer]
             [honeysql.core :as h]
             [honeysql.helpers :refer :all]))
 
@@ -9,7 +10,8 @@
   (j/query db-spec (h/format query)))
 
 (defn create-transaction [transaction]
-  (let [record (select-keys transaction [:value :comments :category])]
+  (let [transaction-with-formatted-date (update-in transaction [:date] #(coercer/to-sql-date %))
+        record (select-keys transaction-with-formatted-date [:value :comments :category :date])]
     (log/debug "Creating transaction with" record)
     (let [query (-> (insert-into :transactions)
                    (values [record]))]
@@ -39,7 +41,8 @@
                  (from :transactions))))
 
 (defn update-transaction [id transaction]
-  (let [record (select-keys transaction [:value :comments :category])]
+  (let [transaction-with-formatted-date (update-in transaction [:date] #(coercer/to-sql-date %))
+        record (select-keys transaction-with-formatted-date [:value :comments :category :date])]
     (log/debug "Updating transaction with id" id "with" record)
     (run-query (-> (update :transactions)
                    (sset record)

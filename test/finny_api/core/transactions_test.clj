@@ -1,12 +1,15 @@
 (ns finny-api.core.transactions-test
   (:require [midje.sweet :refer :all]
+            [clj-time.core :as date]
             [finny-api.core.transactions :as transactions]
             [finny-api.db.transactions :as db]))
 
+(def today (date/date-time 2016 01 01))
+
 (fact "Stores transaction in db with known fields"
-      (against-background (db/create-transaction {:value 7 :comments "Blah" :category "Entertainment"}) => true)
-      (let [stored-transaction (transactions/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :useless-field true})]
-        stored-transaction => {:value 7 :comments "Blah" :category "Entertainment"}))
+      (against-background (db/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :date today}) => true)
+      (let [stored-transaction (transactions/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :date "2016-01-01" :useless-field true})]
+        stored-transaction => {:value 7 :comments "Blah" :category "Entertainment" :date today}))
 
 (fact "Gets the total value of transactions from db"
       (against-background (db/total-value-of-transactions) => 27)
@@ -27,9 +30,9 @@
         all-transactions => [{:value 1 :comments "um"} {:value 2 :comments "dois"}]))
 
 (fact "Updates a transaction in the db"
-      (against-background (db/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment"}) => 1)
-      (let [updated-transaction (transactions/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment"})]
-        updated-transaction => {:value 80 :comments "8 * 10" :category "Entertainment"}))
+      (against-background (db/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment" :date today}) => 1)
+      (let [updated-transaction (transactions/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment" :date "2016-01-01"})]
+        updated-transaction => {:value 80 :comments "8 * 10" :category "Entertainment" :date today}))
 
 (fact "Deletes a transaction in the db"
       (against-background (db/delete-transaction 3) => 1)
@@ -37,5 +40,5 @@
         deleted => :deleted))
 
 (fact "Gets transactions by category"
-      (against-background (db/get-transactions-by-category "Entertainment") => [{:value 3 :comments "Nada" :category "Entertainment"}])
-      (transactions/get-transactions-by-category "Entertainment") => [{:value 3 :comments "Nada" :category "Entertainment"}])
+      (against-background (db/get-transactions-by-category "Entertainment") => [{:value 3 :category "Entertainment"}])
+      (transactions/get-transactions-by-category "Entertainment") => [{:value 3 :category "Entertainment"}])
