@@ -1,0 +1,20 @@
+version: '2'
+services:
+  db:
+    image: postgres
+  api:
+    image: finny-api
+    command: java -jar app-standalone.jar
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgres://postgres@db:5432/finny?ssl=false"
+  test:
+    image: finny-api
+    command: lein midje
+    environment:
+      FINNY_ENV: 'test'
