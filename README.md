@@ -36,6 +36,19 @@ In order to create a transaction with 7 as its value, run:
 
     curl localhost:3000/transactions -H "Content-Type: application/json"
 
+### Filtering transactions
+
+#### by date
+
+    curl -XGET localhost:3000/transactions -d '{"filters": {"date": {"is": "2016-01-01"}}}' -H "Content-Type: application/json"
+    curl -XGET localhost:3000/transactions -d '{"filters": {"date": {"before": "2016-01-01"}}}' -H "Content-Type: application/json"
+    curl -XGET localhost:3000/transactions -d '{"filters": {"date": {"after": "2015-01-01"}}}' -H "Content-Type: application/json"
+    curl -XGET localhost:3000/transactions -d '{"filters": {"date": {"after": "2015-01-01", "before": "2017-01-01"}}}' -H "Content-Type: application/json"
+
+#### by category
+
+    curl -XGET localhost:3000/transactions -d '{"filters": {"category": "Education"}}' -H "Content-Type: application/json"; echo
+
 ## Testing
 
 ### Running the tests

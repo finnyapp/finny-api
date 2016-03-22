@@ -16,12 +16,6 @@
         (:status response) => 200
         (:total (parse-string (:body response) true)) => 5))
 
-(fact "Gets all transactions"
-      (against-background (transactions/all-transactions) => [{:value 1} {:value 2}])
-      (let [response (app (mock/request :get "/transactions"))]
-        (:status response) => 200
-        (:transactions (parse-string (:body response) true)) => [{:value 1} {:value 2}]))
-
 (fact "Gets transaction"
       (against-background (transactions/get-transaction "7") => {:value 14})
       (let [response (app (mock/request :get "/transaction/7"))]
@@ -68,8 +62,18 @@
       (let [response (app (mock/request :post "/"))]
         (:status response) => 405))
 
-(fact "GETs transactions by categories"
-      (against-background (transactions/get-transactions-by-category "Education") => [{:value 1 :category "Education"}])
-      (let [response (app (mock/request :get "/transactions/category/Education"))]
+(fact "GETs transactions filtered by categories"
+      (against-background (transactions/get-transactions {:category "Education"}) => [{:value 1 :category "Education"}])
+      (let [response (app (mock/content-type
+                                 (mock/body
+                                   (mock/request :get "/transactions")
+                                   (generate-string {:filters {:category "Education"}}))
+                                 "application/json"))]
         (:status response) => 200
         (:transactions (parse-string (:body response) true)) => [{:value 1 :category "Education"}]))
+
+(fact "Gets all transactions"
+      (against-background (transactions/get-transactions {}) => [{:value 1} {:value 2}])
+      (let [response (app (mock/request :get "/transactions"))]
+        (:status response) => 200
+        (:transactions (parse-string (:body response) true)) => [{:value 1} {:value 2}]))

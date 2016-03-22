@@ -3,10 +3,15 @@
             [clj-time.format :as date-formatter]
             [clojure.tools.logging :as log]))
 
+(defn- format-date-in [transaction]
+  (if (:date transaction)
+    (update-in transaction [:date] #(date-formatter/parse (date-formatter/formatter "yyyy-MM-dd") %))
+    transaction))
+
 (defn create-transaction [transaction]
-  (let [transaction-with-formatted-date (update-in transaction [:date] #(date-formatter/parse (date-formatter/formatter "yyyy-MM-dd") %))
+  (log/debug "Creating transaction with" transaction)
+  (let [transaction-with-formatted-date (format-date-in transaction)
         record (select-keys transaction-with-formatted-date [:value :comments :category :date])]
-    (log/debug "Creating transaction with" record)
     (db/create-transaction record)
     record))
 
@@ -16,19 +21,14 @@
 
 (defn get-transaction [id]
   (log/debug "Getting transaction with id" id)
-  (or (db/get-transaction id)
-      {}))
+  (or (db/get-transaction id) {}))
 
-(defn get-transactions-by-category [category]
-  (log/debug "Getting transacations with category" category)
-  (db/get-transactions-by-category category))
-
-(defn all-transactions []
-  (log/debug "Getting all transactions")
-  (db/all-transactions))
+(defn get-transactions [query-filter]
+  (log/debug "Getting transacations with filter" query-filter)
+  (db/get-transactions query-filter))
 
 (defn update-transaction [id transaction]
-  (let [transaction-with-formatted-date (update-in transaction [:date] #(date-formatter/parse (date-formatter/formatter "yyyy-MM-dd") %))
+  (let [transaction-with-formatted-date (format-date-in transaction)
         record (select-keys transaction-with-formatted-date [:value :comments :category :date])]
    (log/debug "Updating transaction with id" id "with" record)
    (db/update-transaction id record)

@@ -24,11 +24,6 @@
         found-transaction => {:value 99 :comments "99 problems"}
         missing-transaction => {}))
 
-(fact "Gets all transactions from db"
-      (against-background (db/all-transactions) => [{:value 1 :comments "um"} {:value 2 :comments "dois"}])
-      (let [all-transactions (transactions/all-transactions)]
-        all-transactions => [{:value 1 :comments "um"} {:value 2 :comments "dois"}]))
-
 (fact "Updates a transaction in the db"
       (against-background (db/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment" :date today}) => 1)
       (let [updated-transaction (transactions/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment" :date "2016-01-01"})]
@@ -39,6 +34,11 @@
       (let [deleted (transactions/delete-transaction 3)]
         deleted => :deleted))
 
-(fact "Gets transactions by category"
-      (against-background (db/get-transactions-by-category "Entertainment") => [{:value 3 :category "Entertainment"}])
-      (transactions/get-transactions-by-category "Entertainment") => [{:value 3 :category "Entertainment"}])
+(fact "Gets all transactions from db"
+      (against-background (db/get-transactions {}) => [{:value 1 :comments "um"} {:value 2 :comments "dois"}])
+      (let [all-transactions (transactions/get-transactions {})]
+        all-transactions => [{:value 1 :comments "um"} {:value 2 :comments "dois"}]))
+
+(fact "Gets transactions filtered by category"
+      (against-background (db/get-transactions {:category "Entertainment"}) => [{:value 3 :category "Entertainment"}])
+      (transactions/get-transactions {:category "Entertainment"}) => [{:value 3 :category "Entertainment"}])
