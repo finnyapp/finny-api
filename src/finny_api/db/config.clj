@@ -1,5 +1,4 @@
 (ns finny-api.db.config
-  (:require [korma.db :as korma])
   (:refer-clojure :exclude [replace reverse])
   (:use [clojure.string :as str])
   (:import (java.net URI)))
@@ -26,4 +25,4 @@
           :subname "//localhost:5432/finny"}
          (heroku-db)))
 
-(korma/defdb finny-api-db db-connection-info)
+(defonce db-spec db-connection-info)
