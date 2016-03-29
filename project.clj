@@ -25,4 +25,9 @@
   :ring {:handler finny-api.core.handler/app}
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring/ring-mock "0.3.0"]
-                                  [midje "1.8.3" :exclusions [org.clojure/clojure]]] }})
+                                  [midje "1.8.3" :exclusions [org.clojure/clojure]]] }}
+  :test-paths ["test/unit-tests" "test/integration-tests" "test/acceptance-tests"]
+  :aliases {"acceptance-tests"  ["midje" ":filters" "at"]
+            "integration-tests" ["midje" ":filters" "it"]
+            "unit-tests"        ["midje" ":config" "unit-tests.config"]
+            "test"              ["midje"]})

@@ -15,6 +15,11 @@ services:
       DATABASE_URL: "postgres://postgres@db:5432/finny?ssl=false"
   test:
     image: finny-api
-    command: lein midje
+    command: lein unit-tests
     environment:
       FINNY_ENV: 'test'
+  tests-with-db:
+    image: finny-api
+    command: lein midje
+    environment:
+      DATABASE_URL: "postgres://postgres@db:5432/finny?ssl=false"
