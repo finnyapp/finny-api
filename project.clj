@@ -16,7 +16,6 @@
                  [lobos "1.0.0-beta3"]
                  [clj-time "0.11.0"]
                  [clj-http "2.1.0"]
-                 [environ "1.0.2"]
                  [log4j/log4j "1.2.17" :exclusions  [javax.mail/mail
                                                      javax.jms/jms
                                                      com.sun.jmdk/jmxtools
@@ -24,13 +23,11 @@
   :plugins [[lein-ring "0.9.7"]
             [lein-midje "3.2"]
             [lein-cloverage "1.0.6"]
-            [lein-environ "1.0.2"]
             [org.clojars.edtsech/lein-lobos "1.0.0-beta1"]]
   :ring {:handler finny-api.core.handler/app}
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring/ring-mock "0.3.0"]
-                                  [midje "1.8.3" :exclusions [org.clojure/clojure]]]
-             :unit-tests {:env {:finny-env :test}}}}
+                                  [midje "1.8.3" :exclusions [org.clojure/clojure]]] }}
   :test-paths ["test/unit-tests" "test/integration-tests" "test/acceptance-tests"]
   :aliases {"acceptance-tests"  ["midje" ":filters" "at"]
             "integration-tests" ["midje" ":filters" "it"]

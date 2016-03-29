@@ -1,9 +1,8 @@
 (ns lobos.config
   (:use [finny-api.db.config :as finny-db]
-        lobos.connectivity)
-  (:require [environ.core :as environ]))
+        lobos.connectivity))
 
-(when (not (= (environ/env :finny-env) "test"))
+(when (not (= (System/getenv "FINNY_ENV") "test"))
         (with-connection finny-db/db-connection-info))
 
 (def db finny-db/db-connection-info)
