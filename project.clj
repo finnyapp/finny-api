@@ -6,7 +6,8 @@
                  [compojure "1.5.0"]
                  [ring/ring-defaults "0.2.0"]
                  [ring/ring-json "0.4.0"]
-                 [org.clojure/java.jdbc "0.4.2"]
+                 [ring/ring-jetty-adapter "1.4.0"]
+                 [org.clojure/java.jdbc "0.5.0"]
                  [cheshire "5.5.0"]
                  [postgresql "9.3-1102.jdbc41"]
                  [org.clojure/tools.logging "0.3.1"]
@@ -14,6 +15,7 @@
                  [honeysql "0.6.3"]
                  [lobos "1.0.0-beta3"]
                  [clj-time "0.11.0"]
+                 [clj-http "2.1.0"]
                  [log4j/log4j "1.2.17" :exclusions  [javax.mail/mail
                                                      javax.jms/jms
                                                      com.sun.jmdk/jmxtools
