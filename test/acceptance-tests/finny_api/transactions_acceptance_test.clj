@@ -50,18 +50,21 @@
 (defn- id-from [response]
   (:id (json/parse-string (:body response) true)))
 
+(defn- get-path [path]
+  (client/get (str host path)))
+
 (against-background [(before :contents (start-server))
                      (before :contents (prepare-db))
                      (after  :contents (clear-db))
                      (after  :contents (stop-server))]
 
   (fact "Gets root" :at
-        (let [response (client/get host)]
+        (let [response (get-path "")]
           (:status response) => 200
           (:message (body-of response)) => "Hello, world!"))
 
   (fact "Gets all transactions" :at
-        (let [response (client/get (str host "transactions"))]
+        (let [response (get-path "transactions")]
           (:status response) => 200
           (map #(select-keys % [:value :comments]) (:transactions (body-of response)))
             => (vector small-expense heavy-expense)))
@@ -69,8 +72,8 @@
   (fact "Creates a transaction and retrieves it by id and from all transactions" :at
         (let [response-for-create (a-post)
               brand-new-id (id-from response-for-create)
-              response-for-all-transactions (client/get (str host "transactions"))
-              response-for-get-transaction (client/get (str host "transaction/" brand-new-id))]
+              response-for-all-transactions (get-path "transactions")
+              response-for-get-transaction (get-path (str "transaction/" brand-new-id))]
           (:status response-for-create) => 201
           (:id (body-of response-for-create)) => brand-new-id
           (select-keys (body-of response-for-get-transaction) [:value :comments]) => a-brand-new-transaction
