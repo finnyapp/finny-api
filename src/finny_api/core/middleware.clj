@@ -10,8 +10,7 @@
       (log/debug remote-addr (upper-case (name request-method)) uri)
       (handler req))))
 
-(defn wrap-response-logger
-  [handler]
+(defn wrap-response-logger [handler]
   (fn [req]
     (let [response (handler req)
           {remote-addr :remote-addr request-method :request-method uri :uri} req

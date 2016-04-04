@@ -7,9 +7,9 @@
 (def today (date/date-time 2016 01 01))
 
 (fact "Stores transaction in db with known fields"
-      (against-background (db/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :date today}) => true)
+      (against-background (db/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :date today}) => {:id 1 :value 7 :comments "Blah" :category "Entertainment" :date today})
       (let [stored-transaction (transactions/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :date "2016-01-01" :useless-field true})]
-        stored-transaction => {:value 7 :comments "Blah" :category "Entertainment" :date today}))
+        stored-transaction => {:id 1 :value 7 :comments "Blah" :category "Entertainment" :date today}))
 
 (fact "Gets the total value of transactions from db"
       (against-background (db/total-value-of-transactions) => 27)

@@ -24,9 +24,7 @@
   (j/query db-spec (sql/format query)))
 
 (defn- insert-transaction [transaction]
-  (try
-    (db/create-transaction transaction)
-    (catch Exception e :ok)))
+  (db/create-transaction transaction))
 
 (defn- clear-db []
   (try
@@ -38,18 +36,44 @@
   (insert-transaction small-expense)
   (insert-transaction heavy-expense))
 
+(def host "http://localhost:3000/")
+
+(def a-brand-new-transaction {:value 123456.0 :comments "This one was just created!"})
+
+(def a-post (fn [] (client/post (str host "transaction")
+                                {:content-type :json
+                                 :body (json/generate-string a-brand-new-transaction)})))
+
+(defn body-of [response]
+  (json/parse-string (:body response) true))
+
+(defn- id-from [response]
+  (:id (json/parse-string (:body response) true)))
+
 (against-background [(before :contents (start-server))
                      (before :contents (prepare-db))
                      (after  :contents (clear-db))
                      (after  :contents (stop-server))]
 
   (fact "Gets root" :at
-        (let [response (client/get "http://localhost:3000")]
+        (let [response (client/get host)]
           (:status response) => 200
-          (:message (json/parse-string (:body response) true)) => "Hello, world!"))
+          (:message (body-of response)) => "Hello, world!"))
 
   (fact "Gets all transactions" :at
-        (let [response (client/get "http://localhost:3000/transactions")]
+        (let [response (client/get (str host "transactions"))]
           (:status response) => 200
-          (map #(select-keys % [:value :comments]) (:transactions (json/parse-string (:body response) true)))
-            => (vector small-expense heavy-expense))))
+          (map #(select-keys % [:value :comments]) (:transactions (body-of response)))
+            => (vector small-expense heavy-expense)))
+
+  (fact "Creates a transaction and retrieves it by id and from all transactions" :at
+        (let [response-for-create (a-post)
+              brand-new-id (id-from response-for-create)
+              response-for-all-transactions (client/get (str host "transactions"))
+              response-for-get-transaction (client/get (str host "transaction/" brand-new-id))]
+          (:status response-for-create) => 201
+          (:id (body-of response-for-create)) => brand-new-id
+          (select-keys (body-of response-for-get-transaction) [:value :comments]) => a-brand-new-transaction
+          (contains? (set (map #(select-keys % [:value :comments]) (:transactions (body-of response-for-all-transactions)))) a-brand-new-transaction)
+            => true))
+)

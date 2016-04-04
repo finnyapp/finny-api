@@ -12,8 +12,7 @@
   (log/debug "Creating transaction with" transaction)
   (let [transaction-with-formatted-date (format-date-in transaction)
         record (select-keys transaction-with-formatted-date [:value :comments :category :date])]
-    (db/create-transaction record)
-    record))
+    (db/create-transaction record)))
 
 (defn total-value-of-transactions []
   (log/debug "Getting total of transactions")

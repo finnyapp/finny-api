@@ -32,4 +32,5 @@
   :aliases {"acceptance-tests"  ["midje" ":filters" "at"]
             "integration-tests" ["midje" ":filters" "it"]
             "unit-tests"        ["midje" ":config" "unit-tests.config"]
-            "test"              ["midje"]})
+            "test"              ["midje"]
+            "tests"             ["midje"]})

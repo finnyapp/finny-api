@@ -15,7 +15,7 @@
    :headers {"Content-Type" "application/hal+json; charset=utf-8"}
    :body    (json/generate-string (wrap-hal-links data request))})
 
-(defn a-quote [] 
+(defn a-quote []
   {:message "Hello, world!"})
 
 (defn response-to-create-transaction [request]
