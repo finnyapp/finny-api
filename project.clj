@@ -11,7 +11,7 @@
                  [cheshire "5.5.0"]
                  [postgresql "9.3-1102.jdbc41"]
                  [org.clojure/tools.logging "0.3.1"]
-                 [org.slf4j/slf4j-log4j12 "1.7.19"]
+                 [org.slf4j/slf4j-log4j12 "1.7.21"]
                  [honeysql "0.6.3"]
                  [lobos "1.0.0-beta3"]
                  [clj-time "0.11.0"]
