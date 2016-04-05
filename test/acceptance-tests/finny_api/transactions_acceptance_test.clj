@@ -63,6 +63,11 @@
           (:status response) => 200
           (:message (body-of response)) => "Hello, world!"))
 
+  (fact "Gets the total of all transactions" :at
+        (let [response (get-path "transactions/total")]
+          (:status response) => 200
+          (:total (body-of response)) => (+ (:value small-expense) (:value heavy-expense))))
+
   (fact "Gets all transactions" :at
         (let [response (get-path "transactions")]
           (:status response) => 200
