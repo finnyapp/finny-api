@@ -53,10 +53,10 @@
 (defn- get-path [path]
   (client/get (str host path)))
 
-(against-background [(before :contents (start-server))
-                     (before :contents (prepare-db))
-                     (after  :contents (clear-db))
-                     (after  :contents (stop-server))]
+(against-background [(before :facts (start-server))
+                     (before :facts (prepare-db))
+                     (after  :facts (clear-db))
+                     (after  :facts (stop-server))]
 
   (fact "Gets options" :at
         (let [response (client/options host)]
