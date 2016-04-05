@@ -74,6 +74,19 @@
           (map #(select-keys % [:value :comments]) (:transactions (body-of response)))
             => (vector small-expense heavy-expense)))
 
+  (fact "Updates a transaction" :at
+        (let [response-for-create (a-post)
+              brand-new-id (id-from response-for-create)
+              response-for-update-transaction (client/put (str host "transaction/" brand-new-id)
+                                                           {:content-type :json
+                                                            :body (json/generate-string {:value (* 3 (:value a-brand-new-transaction))
+                                                                                         :comments "Just updated"})})
+              response-for-get-transaction (get-path (str "transaction/" brand-new-id))]
+          (:status response-for-create) => 201
+          (:status response-for-update-transaction) => 200
+          (select-keys (body-of response-for-get-transaction) [:value :comments]) => {:value (* 3 (:value a-brand-new-transaction))
+                                                                             :comments "Just updated"}))
+
   (fact "Creates a transaction and retrieves it by id and from all transactions" :at
         (let [response-for-create (a-post)
               brand-new-id (id-from response-for-create)
