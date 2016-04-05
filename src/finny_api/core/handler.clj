@@ -23,7 +23,10 @@
     (json-response (transactions/create-transaction transaction) request 201)))
 
 (defn response-to-get-transaction [request]
-  (json-response (transactions/get-transaction (get-in request [:params :id])) request))
+  (let [transaction (transactions/get-transaction (get-in request [:params :id]))]
+    (if (empty? transaction)
+      (json-response {} request 404)
+      (json-response transaction request))))
 
 (defn response-to-get-transactions-total [request]
   (json-response {:total (transactions/total-value-of-transactions)} request))
@@ -62,4 +65,8 @@
   (ANY "*" [] (route/not-found "Not Found")))
 
 (def app
-  (wrap-response-logger (wrap-exception-handler (wrap-request-logger (wrap-json-response (wrap-json-body app-routes {:keywords? true :bigdecimals? true}))))))
+  (-> (wrap-json-body app-routes {:keywords? true :bigdecimals? true})
+      (wrap-json-response)
+      (wrap-request-logger)
+      (wrap-exception-handler)
+      (wrap-response-logger)))

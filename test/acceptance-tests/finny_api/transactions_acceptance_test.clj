@@ -58,6 +58,11 @@
                      (after  :contents (clear-db))
                      (after  :contents (stop-server))]
 
+  (fact "Gets options" :at
+        (let [response (client/options host)]
+          (:status response) => 200
+          (:version (body-of response)) => "0.1.0-SNAPSHOT"))
+
   (fact "Gets root" :at
         (let [response (get-path "")]
           (:status response) => 200
@@ -85,7 +90,7 @@
           (:status response-for-create) => 201
           (:status response-for-update-transaction) => 200
           (select-keys (body-of response-for-get-transaction) [:value :comments]) => {:value (* 3 (:value a-brand-new-transaction))
-                                                                             :comments "Just updated"}))
+                                                                                      :comments "Just updated"}))
 
   (fact "Creates a transaction and retrieves it by id and from all transactions" :at
         (let [response-for-create (a-post)
@@ -97,4 +102,20 @@
           (select-keys (body-of response-for-get-transaction) [:value :comments]) => a-brand-new-transaction
           (contains? (set (map #(select-keys % [:value :comments]) (:transactions (body-of response-for-all-transactions)))) a-brand-new-transaction)
             => true))
-)
+
+  (fact "Deletes a transaction" :at
+        (let [response-for-create (a-post)
+              brand-new-id (id-from response-for-create)
+              response-for-delete-transaction (client/delete (str host "transaction/" brand-new-id) {:content-type :json})
+              response-for-get-transaction (client/get (str host "transaction/" brand-new-id) {:throw-exceptions false})]
+          (:status response-for-create) => 201
+          (:status response-for-delete-transaction) => 200
+          (:status response-for-get-transaction) => 404))
+
+  (fact "Anything else at root goes nuts" :at
+        (let [response (client/delete host {:throw-exceptions false})]
+          (:status response) => 405))
+
+  (fact "Anything else other path 404s" :at
+        (let [response (client/get (str host "missing-path") {:throw-exceptions false})]
+          (:status response) => 404)))
