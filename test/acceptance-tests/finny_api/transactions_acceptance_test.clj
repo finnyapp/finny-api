@@ -1,40 +1,9 @@
 (ns finny-api.transactions-acceptance-test
-  (:require [finny-api.core.handler :refer [app]]
-            [midje.sweet :refer :all]
-            [ring.adapter.jetty :refer [run-jetty]]
+  (:require [midje.sweet :refer :all]
             [clj-http.client :as client]
             [cheshire.core :as json]
-            [finny-api.db.config :refer [db-spec]]
-            [clojure.java.jdbc :as j]
-            [honeysql.core :as sql]
-            [honeysql.helpers :as db-helpers]
-            [finny-api.db.transactions :as db]
+            [finny-api.test-env :as test-env]
             [finny-api.transactions-fixtures :refer [small-expense heavy-expense]]))
-
-(def server (atom nil))
-
-(defn start-server []
-  (swap! server
-         (fn [_] (run-jetty app {:port 3000 :join? false}))))
-
-(defn stop-server []
-  (.stop @server))
-
-(defn- run-query [query]
-  (j/query db-spec (sql/format query)))
-
-(defn- insert-transaction [transaction]
-  (db/create-transaction transaction))
-
-(defn- clear-db []
-  (try
-    (run-query (-> (db-helpers/delete-from :transactions)))
-    (catch Exception e :ok)))
-
-(defn- prepare-db []
-  (clear-db)
-  (insert-transaction small-expense)
-  (insert-transaction heavy-expense))
 
 (def host "http://localhost:3000/")
 
@@ -53,10 +22,10 @@
 (defn- get-path [path]
   (client/get (str host path)))
 
-(against-background [(before :facts (start-server))
-                     (before :facts (prepare-db))
-                     (after  :facts (clear-db))
-                     (after  :facts (stop-server))]
+(against-background [(before :facts (test-env/start-server))
+                     (before :facts (test-env/prepare-db))
+                     (after  :facts (test-env/clear-db))
+                     (after  :facts (test-env/stop-server))]
 
   (fact "Gets options" :at
         (let [response (client/options host)]
