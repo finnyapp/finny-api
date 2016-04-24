@@ -3,11 +3,13 @@
             [clj-http.client :as client]
             [cheshire.core :as json]
             [finny-api.test-env :as test-env]
-            [finny-api.transactions-fixtures :refer [small-expense heavy-expense]]))
+            [finny-api.transactions-fixtures :refer :all]))
 
-(def host "http://localhost:3000/")
+(def port 3000)
 
-(def a-brand-new-transaction {:value 123456.0 :comments "This one was just created!"})
+(def host (str "http://localhost:" port "/"))
+
+(def a-brand-new-transaction {:value 123456.0 :comments "This expense was just created!" :type "expense"})
 
 (def a-post (fn [] (client/post (str host "transaction")
                                 {:content-type :json
@@ -22,7 +24,7 @@
 (defn- get-path [path]
   (client/get (str host path)))
 
-(against-background [(before :facts (test-env/start-server))
+(against-background [(before :facts (test-env/start-server port))
                      (before :facts (test-env/prepare-db))
                      (after  :facts (test-env/clear-db))
                      (after  :facts (test-env/stop-server))]
@@ -38,15 +40,17 @@
           (:message (body-of response)) => "Hello, world!"))
 
   (fact "Gets the total of all transactions" :at
-        (let [response (get-path "transactions/total")]
+        (let [response (get-path "transactions/total")
+              income (+ (:value small-income) (:value large-income))
+              expense (+ (:value small-expense) (:value heavy-expense))]
           (:status response) => 200
-          (:total (body-of response)) => (+ (:value small-expense) (:value heavy-expense))))
+          (:total (body-of response)) => (- income expense)))
 
   (fact "Gets all transactions" :at
         (let [response (get-path "transactions")]
           (:status response) => 200
-          (map #(select-keys % [:value :comments]) (:transactions (body-of response)))
-            => (vector small-expense heavy-expense)))
+          (map #(select-keys % [:value :comments :type]) (:transactions (body-of response)))
+            => (vector small-expense heavy-expense small-income large-income)))
 
   (fact "Updates a transaction" :at
         (let [response-for-create (a-post)
@@ -68,8 +72,8 @@
               response-for-get-transaction (get-path (str "transaction/" brand-new-id))]
           (:status response-for-create) => 201
           (:id (body-of response-for-create)) => brand-new-id
-          (select-keys (body-of response-for-get-transaction) [:value :comments]) => a-brand-new-transaction
-          (contains? (set (map #(select-keys % [:value :comments]) (:transactions (body-of response-for-all-transactions)))) a-brand-new-transaction)
+          (select-keys (body-of response-for-get-transaction) [:value :comments :type]) => a-brand-new-transaction
+          (contains? (set (map #(select-keys % [:value :comments :type]) (:transactions (body-of response-for-all-transactions)))) a-brand-new-transaction)
             => true))
 
   (fact "Deletes a transaction" :at

@@ -20,3 +20,7 @@
 (defmigration add-date-to-transactions
   (up [] (alter :add (table :transactions (date :date))))
   (down [] (alter :drop (table :transactions (column :date)))))
+
+(defmigration add-type-to-transactions
+  (up [] (alter :add (table :transactions (varchar :type 255))))
+  (down [] (alter :drop (table :transactions (column :type)))))

@@ -28,14 +28,9 @@
 (defn create-transaction [transaction]
   (log/debug "Creating transaction with" transaction)
   (let [transaction-with-formatted-date (format-date-in transaction)
-        record (select-keys transaction-with-formatted-date [:value :comments :category :date])
+        record (select-keys transaction-with-formatted-date [:value :comments :category :date :type])
         stored-record (insert record)]
     (assoc transaction :id (:id (first stored-record)))))
-
-(defn total-value-of-transactions []
-  (log/debug "Getting total of transactions")
-  (reduce + (map #(bigdec (get % :value)) (run-query (-> (select :*)
-                                                         (from :transactions))))))
 
 (defn get-transaction [id]
   (log/debug "Getting transaction with id" id)
@@ -56,7 +51,7 @@
 
 (defn update-transaction [id transaction]
   (let [transaction-with-formatted-date (format-date-in transaction)
-        record (select-keys transaction-with-formatted-date [:value :comments :category :date])]
+        record (select-keys transaction-with-formatted-date [:value :comments :category :date :type])]
     (log/debug "Updating transaction with id" id "with" record)
     (run-query (-> (update :transactions)
                    (sset record)

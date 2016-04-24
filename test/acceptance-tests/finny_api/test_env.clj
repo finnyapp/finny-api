@@ -6,13 +6,13 @@
             [honeysql.core :as sql]
             [honeysql.helpers :as db-helpers]
             [finny-api.db.transactions :as db]
-            [finny-api.transactions-fixtures :refer [small-expense heavy-expense]]))
+            [finny-api.transactions-fixtures :refer :all]))
 
 (def server (atom nil))
 
-(defn start-server []
+(defn start-server [port]
   (swap! server
-         (fn [_] (run-jetty app {:port 3000 :join? false}))))
+         (fn [_] (run-jetty app {:port port :join? false}))))
 
 (defn stop-server []
   (.stop @server))
@@ -31,4 +31,6 @@
 (defn prepare-db []
   (clear-db)
   (insert-transaction small-expense)
-  (insert-transaction heavy-expense))
+  (insert-transaction heavy-expense)
+  (insert-transaction small-income)
+  (insert-transaction large-income))

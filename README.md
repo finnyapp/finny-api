@@ -28,9 +28,13 @@ To start the app up, run this:
 
 ### Creating a transaction
 
-In order to create a transaction with 7 as its value, run:
+In order to create an income transaction with 700 as its value, run:
 
-    curl -XPOST finny-api.herokuapp.com/transaction -d '{"value": 7}' -H "Content-Type: application/json"
+    curl -XPOST localhost:3000/transaction -d '{"value": 700, "type": "income"}' -H "Content-Type: application/json"
+
+And an expense, valued 7, run:
+
+    curl -XPOST localhost:3000/transaction -d '{"value": 7, "type": "expense"}' -H "Content-Type: application/json"
 
 ### Getting all transactions
 

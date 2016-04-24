@@ -7,12 +7,12 @@
 (def today (date/date-time 2016 01 01))
 
 (fact "Stores transaction in db with known fields"
-      (against-background (db/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :date today}) => {:id 1 :value 7 :comments "Blah" :category "Entertainment" :date today})
-      (let [stored-transaction (transactions/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :date "2016-01-01" :useless-field true})]
-        stored-transaction => {:id 1 :value 7 :comments "Blah" :category "Entertainment" :date today}))
+      (against-background (db/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :date today :type "income"}) => {:id 1 :value 7 :comments "Blah" :category "Entertainment" :date today :type "income"})
+      (let [stored-transaction (transactions/create-transaction {:value 7 :comments "Blah" :category "Entertainment" :date "2016-01-01" :type "income" :useless-field true})]
+        stored-transaction => {:id 1 :value 7 :comments "Blah" :category "Entertainment" :date today :type "income"}))
 
 (fact "Gets the total value of transactions from db"
-      (against-background (db/total-value-of-transactions) => 27)
+      (against-background (db/get-transactions {}) => [{:value 3 :type "expense"} {:value 30 :type "income"}])
       (let [total (transactions/total-value-of-transactions)]
         total => 27))
 
@@ -25,9 +25,9 @@
         missing-transaction => {}))
 
 (fact "Updates a transaction in the db"
-      (against-background (db/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment" :date today}) => 1)
-      (let [updated-transaction (transactions/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment" :date "2016-01-01"})]
-        updated-transaction => {:value 80 :comments "8 * 10" :category "Entertainment" :date today}))
+      (against-background (db/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment" :date today :type "expense"}) => 1)
+      (let [updated-transaction (transactions/update-transaction 8 {:value 80 :comments "8 * 10" :category "Entertainment" :date "2016-01-01" :type "expense"})]
+        updated-transaction => {:value 80 :comments "8 * 10" :category "Entertainment" :date today :type "expense"}))
 
 (fact "Deletes a transaction in the db"
       (against-background (db/delete-transaction 3) => 1)
