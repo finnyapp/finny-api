@@ -3,15 +3,9 @@
             [clj-time.format :as date-formatter]
             [clojure.tools.logging :as log]))
 
-(defn- format-date-in [transaction]
-  (if (:date transaction)
-    (update-in transaction [:date] #(date-formatter/parse (date-formatter/formatter "yyyy-MM-dd") %))
-    transaction))
-
 (defn create-transaction [transaction]
   (log/debug "Creating transaction with" transaction)
-  (let [transaction-with-formatted-date (format-date-in transaction)
-        record (select-keys transaction-with-formatted-date [:value :comments :category :date :type])]
+  (let [record (select-keys transaction [:value :comments :category :date :type])]
     (db/create-transaction record)))
 
 (defn total-value-of-transactions []
@@ -29,8 +23,7 @@
   (db/get-transactions query-filter))
 
 (defn update-transaction [id transaction]
-  (let [transaction-with-formatted-date (format-date-in transaction)
-        record (select-keys transaction-with-formatted-date [:value :comments :category :date :type])]
+  (let [record (select-keys transaction [:value :comments :category :date :type])]
    (log/debug "Updating transaction with id" id "with" record)
    (db/update-transaction id record)
    record))
