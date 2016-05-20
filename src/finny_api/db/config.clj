@@ -15,7 +15,9 @@
         {:subname (str "//" host ":" port path)}
         (when-let [user-info (.getUserInfo url)]
           {:user (first (str/split user-info #":"))
-           :password (second (str/split user-info #":"))})))))
+           :password (second (str/split user-info #":"))
+           :ssl "true"
+           :sslfactory "org.postgresql.ssl.NonValidatingFactory"})))))
 
 (def db-connection-info
   (merge {:classname "org.postgresql.Driver"
