@@ -12,10 +12,10 @@
                  [postgresql "9.3-1102.jdbc41"]
                  [org.clojure/tools.logging "0.3.1"]
                  [org.slf4j/slf4j-log4j12 "1.7.21"]
-                 [honeysql "0.8.0"]
+                 [honeysql "0.8.1"]
                  [lobos "1.0.0-beta3"]
-                 [clj-time "0.12.0"]
-                 [clj-http "3.2.0"]
+                 [clj-time "0.12.2"]
+                 [clj-http "3.3.0"]
                  [log4j/log4j "1.2.17" :exclusions  [javax.mail/mail
                                                      javax.jms/jms
                                                      com.sun.jmdk/jmxtools
