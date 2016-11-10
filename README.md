@@ -16,7 +16,7 @@ In order to run the app, you need to setup a PostgreSQL instance, with a databas
 
 Run the database migrations:
 
-    DATABASE_URL="postgres://username:password@hostname:5432/finny" lein lobos migrate
+    DATABASE_URL="postgres://username:password@hostname:5432/finny" lein migratus migrate
 
 ### Starting it up
 

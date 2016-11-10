@@ -13,7 +13,7 @@
                  [org.clojure/tools.logging "0.3.1"]
                  [org.slf4j/slf4j-log4j12 "1.7.21"]
                  [honeysql "0.8.1"]
-                 [lobos "1.0.0-beta3"]
+                 [migratus "0.8.32"]
                  [clj-time "0.12.2"]
                  [clj-http "3.3.0"]
                  [log4j/log4j "1.2.17" :exclusions  [javax.mail/mail
@@ -22,7 +22,10 @@
                                                      com.sun.jmx/jmxri]]]
   :plugins [[lein-ring "0.9.7"]
             [lein-midje "3.2.1"]
-            [org.clojars.edtsech/lein-lobos "1.0.0-beta1"]]
+            [migratus-lein "0.4.3"]]
+  :migratus {:store :database
+             :migration-dir "migrations"
+             :db (or (System/getenv "DATABASE_URL") "postgresql://localhost:5432/finny")}
   :ring {:handler finny-api.core.handler/app}
   :profiles {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                                   [ring/ring-mock "0.3.0"]
