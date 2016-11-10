@@ -7,7 +7,7 @@
                  [ring/ring-defaults "0.2.1"]
                  [ring/ring-json "0.4.0"]
                  [ring/ring-jetty-adapter "1.5.0"]
-                 [org.clojure/java.jdbc "0.5.8"]
+                 [org.clojure/java.jdbc "0.6.1"]
                  [cheshire "5.6.3"]
                  [postgresql "9.3-1102.jdbc41"]
                  [org.clojure/tools.logging "0.3.1"]
