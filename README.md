@@ -81,6 +81,17 @@ You should be able to just deploy the app to Heroku. Make sure you run the datab
 
     docker run -p 3000:3000 -e DATABASE_URL= -it --rm --name finny-api finny/finny-api
 
+### Running the app with docker-compose
+
+    docker-compose up
+
+This will bring up:
+
+- [the database](https://github.com/finnyapp/finny-api/blob/master/docker-compose.yml#L3), with `finny` as the database
+- [the api](https://github.com/finnyapp/finny-api/blob/master/docker-compose.yml#L7) on port 3000
+- [an instance that'll unit tests](https://github.com/finnyapp/finny-api/blob/master/docker-compose.yml#L18)
+- [an instance that'll run all tests, including db stuff](https://github.com/finnyapp/finny-api/blob/master/docker-compose.yml#L25)
+
 ### Testing
 
     docker run -e FINNY_ENV=test -t --rm --name finny-api finny/finny-api lein midje

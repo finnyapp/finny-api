@@ -2,8 +2,10 @@ version: '2'
 services:
   db:
     image: postgres
+    environment:
+      POSTGRES_DB: "finny"
   api:
-    image: finny-api
+    image: finnyapp/finny-api
     command: java -jar app-standalone.jar
     volumes:
       - .:/app
@@ -12,14 +14,16 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: "postgres://postgres@db:5432/finny?ssl=false"
+      DATABASE_URL: "postgres://postgres@db:5432/finny"
   test:
-    image: finny-api
+    image: finnyapp/finny-api
     command: lein unit-tests
     environment:
       FINNY_ENV: 'test'
   tests-with-db:
-    image: finny-api
-    command: lein midje
+    image: finnyapp/finny-api
+    command: lein do migratus migrate, midje
     environment:
-      DATABASE_URL: "postgres://postgres@db:5432/finny?ssl=false"
+      DATABASE_URL: "postgres://postgres@db:5432/finny"
+    depends_on:
+      - db
