@@ -3,24 +3,24 @@
   :url "http://example.com/FIXME"
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [compojure "1.5.1"]
-                 [ring/ring-defaults "0.2.1"]
+                 [compojure "1.5.2"]
+                 [ring/ring-defaults "0.2.3"]
                  [ring/ring-json "0.4.0"]
-                 [ring/ring-jetty-adapter "1.5.0"]
+                 [ring/ring-jetty-adapter "1.5.1"]
                  [org.clojure/java.jdbc "0.6.1"]
-                 [cheshire "5.6.3"]
+                 [cheshire "5.7.0"]
                  [postgresql "9.3-1102.jdbc41"]
                  [org.clojure/tools.logging "0.3.1"]
-                 [org.slf4j/slf4j-log4j12 "1.7.21"]
-                 [honeysql "0.8.1"]
+                 [org.slf4j/slf4j-log4j12 "1.7.23"]
+                 [honeysql "0.8.2"]
                  [migratus "0.8.32"]
-                 [clj-time "0.12.2"]
-                 [clj-http "3.3.0"]
+                 [clj-time "0.13.0"]
+                 [clj-http "3.4.1"]
                  [log4j/log4j "1.2.17" :exclusions  [javax.mail/mail
                                                      javax.jms/jms
                                                      com.sun.jmdk/jmxtools
                                                      com.sun.jmx/jmxri]]]
-  :plugins [[lein-ring "0.9.7"]
+  :plugins [[lein-ring "0.11.0"]
             [lein-midje "3.2.1"]
             [migratus-lein "0.4.3"]]
   :migratus {:store :database
