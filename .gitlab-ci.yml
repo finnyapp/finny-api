@@ -1,0 +1,22 @@
+image: clojure:lein-2.7.1
+
+services:
+  - postgres:latest
+
+variables:
+  POSTGRES_DB: nice_marmot
+  POSTGRES_USER: runner
+  POSTGRES_PASSWORD: ""
+  POSTGRES_URL:  "postgresql://$POSTGRES_USER@postgres/$POSTGRES_DB"
+
+before_script:
+  - lein deps
+
+test:
+  script:
+  - lein do clean, unit-tests
+
+db-migration-test:
+  script:
+  - DATABASE_URL=$POSTGRES_URL lein migratus migrate
+  - DATABASE_URL=$POSTGRES_URL lein migratus reset
