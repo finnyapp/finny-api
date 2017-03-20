@@ -11,9 +11,9 @@
                  [cheshire "5.7.0"]
                  [postgresql "9.3-1102.jdbc41"]
                  [org.clojure/tools.logging "0.3.1"]
-                 [org.slf4j/slf4j-log4j12 "1.7.23"]
+                 [org.slf4j/slf4j-log4j12 "1.7.25"]
                  [honeysql "0.8.2"]
-                 [migratus "0.8.32"]
+                 [migratus "0.8.33"]
                  [clj-time "0.13.0"]
                  [clj-http "3.4.1"]
                  [log4j/log4j "1.2.17" :exclusions  [javax.mail/mail
@@ -22,7 +22,7 @@
                                                      com.sun.jmx/jmxri]]]
   :plugins [[lein-ring "0.11.0"]
             [lein-midje "3.2.1"]
-            [migratus-lein "0.4.3"]]
+            [migratus-lein "0.4.4"]]
   :migratus {:store :database
              :migration-dir "migrations"
              :db (or (System/getenv "DATABASE_URL") "postgresql://localhost:5432/finny")}
