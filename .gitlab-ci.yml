@@ -22,7 +22,6 @@ unit-test:
   script:
   - lein do clean, unit-tests
   stage: test
-  only: master
 
 db-migration-test:
   script:
