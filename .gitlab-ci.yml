@@ -11,12 +11,21 @@ variables:
 
 before_script:
   - lein deps
+  - ls -la
 
-test:
+stages:
+  - build
+  - test
+  - deploy
+
+unit-test:
   script:
   - lein do clean, unit-tests
+  stage: test
+  only: master
 
 db-migration-test:
   script:
   - DATABASE_URL=$POSTGRES_URL lein migratus migrate
   - DATABASE_URL=$POSTGRES_URL lein migratus reset
+  stage: test
