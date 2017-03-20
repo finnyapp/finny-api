@@ -11,7 +11,7 @@ variables:
 
 before_script:
   - lein deps
-  - ls -la
+  - "ls -la"
 
 stages:
   - build
