@@ -53,6 +53,8 @@ acceptance-tests:
 
 build-docker-image:
   image: docker:dind
+  services:
+    - docker:dind
   script:
   - docker build -t finny/finny-api .
   - docker run -e FINNY_ENV=test -t --rm --name finny-api finny/finny-api lein unit-tests
