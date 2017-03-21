@@ -11,14 +11,16 @@ cache:
   paths:
   - ~/.m2
 
-before_script:
-  - lein deps
-  - "ls -la ~/.m2"
-
 stages:
   - build
   - test
   - deploy
+
+download-deps:
+  script:
+  - lein deps
+  - "ls -la ~/.m2"
+  stage: build
 
 unit-test:
   script:
