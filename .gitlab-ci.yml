@@ -65,3 +65,15 @@ dev-db-migrate:
   - DATABASE_URL=$DEV_DATABASE_URL lein migratus migrate
   stage: deploy
   environment: dev
+
+dev-deploy:
+  image: clojure:lein-2.7.1
+  script:
+  - apt-get update -qy
+  - apt-get install -y ruby-dev
+  - gem install dpl
+  - dpl --provider=heroku --app=finny-api-dev --api-key=$HEROKU_API_KEY
+  only:
+  - master
+  stage: deploy
+  environment: dev
