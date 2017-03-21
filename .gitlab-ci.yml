@@ -67,7 +67,6 @@ dev-db-migrate:
   environment: dev
 
 dev-deploy:
-  image: clojure:lein-2.7.1
   script:
   - apt-get update -qy
   - apt-get install -y ruby-dev
