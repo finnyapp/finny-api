@@ -22,7 +22,7 @@ download-deps:
   - "ls -la ~/.m2"
   stage: build
 
-unit-test:
+unit-tests:
   script:
   - lein do clean, unit-tests
   stage: test
@@ -33,4 +33,20 @@ db-migration-test:
   script:
   - DATABASE_URL=$POSTGRES_URL lein migratus migrate
   - DATABASE_URL=$POSTGRES_URL lein migratus reset
+  stage: test
+
+integration-tests:
+  services:
+    - postgres:latest
+  script:
+  - DATABASE_URL=$POSTGRES_URL lein migratus reset
+  - DATABASE_URL=$POSTGRES_URL lein integration-tests
+  stage: test
+
+acceptance-tests:
+  services:
+    - postgres:latest
+  script:
+  - DATABASE_URL=$POSTGRES_URL lein migratus reset
+  - DATABASE_URL=$POSTGRES_URL lein acceptance-tests
   stage: test
