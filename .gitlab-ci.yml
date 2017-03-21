@@ -50,3 +50,10 @@ acceptance-tests:
   - DATABASE_URL=$POSTGRES_URL lein migratus reset
   - DATABASE_URL=$POSTGRES_URL lein acceptance-tests
   stage: test
+
+build-docker-image:
+  script:
+  - docker build -t finny/finny-api .
+  - docker run -e FINNY_ENV=test -t --rm --name finny-api finny/finny-api lein unit-tests
+  - curl -XPOST -H "Content-Type: application/json" "https://registry.hub.docker.com/u/finnyapp/finny-api/trigger/$DOCKER_TOKEN/"
+  stage: deploy
