@@ -58,3 +58,10 @@ build-docker-image:
     - docker run -e FINNY_ENV=test -t --rm --name finny-api finny/finny-api lein unit-tests
     - curl -XPOST -H "Content-Type:\ application/json" "https://registry.hub.docker.com/u/finnyapp/finny-api/trigger/$DOCKER_TOKEN/"
   stage: deploy
+
+dev-db-migrate:
+  image: clojure:lein-2.7.1
+  script:
+  - DATABASE_URL=$DEV_DATABASE_URL lein migratus migrate
+  stage: deploy
+  environment: dev
