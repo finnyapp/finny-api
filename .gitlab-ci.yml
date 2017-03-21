@@ -6,9 +6,14 @@ variables:
   POSTGRES_PASSWORD: ""
   POSTGRES_URL:  "postgresql://$POSTGRES_USER@postgres/$POSTGRES_DB"
 
+cache:
+  key: "$CI_BUILD_NAME"
+  paths:
+  - ~/.m2
+
 before_script:
   - lein deps
-  - "ls -la"
+  - "ls -la ~/.m2"
 
 stages:
   - build
