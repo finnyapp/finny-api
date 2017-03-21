@@ -9,7 +9,7 @@ variables:
 cache:
   key: "$CI_BUILD_NAME"
   paths:
-  - .m2
+  - ~/.m2
 
 stages:
   - build
@@ -19,7 +19,7 @@ stages:
 download-deps:
   script:
   - lein deps
-  - "ls -la .m2"
+  - "ls -la ~/.m2"
   stage: build
 
 unit-test:
