@@ -1,4 +1,3 @@
-image: clojure:lein-2.7.1
 
 variables:
   POSTGRES_DB: nice_marmot
@@ -16,18 +15,18 @@ stages:
   - test
   - deploy
 
-download-deps:
+.download-deps:
   script:
   - lein deps
-  - "ls -la ~/.m2"
   stage: build
 
 unit-tests:
+  image: clojure:lein-2.7.1
   script:
   - lein do clean, unit-tests
   stage: test
 
-db-migration-test:
+.db-migration-test:
   services:
     - postgres:latest
   script:
@@ -35,7 +34,7 @@ db-migration-test:
   - DATABASE_URL=$POSTGRES_URL lein migratus reset
   stage: test
 
-integration-tests:
+.integration-tests:
   services:
     - postgres:latest
   script:
@@ -43,7 +42,7 @@ integration-tests:
   - DATABASE_URL=$POSTGRES_URL lein integration-tests
   stage: test
 
-acceptance-tests:
+.acceptance-tests:
   services:
     - postgres:latest
   script:
@@ -59,4 +58,4 @@ build-docker-image:
   - docker build -t finny/finny-api .
   - docker run -e FINNY_ENV=test -t --rm --name finny-api finny/finny-api lein unit-tests
   - curl -XPOST -H "Content-Type:\ application/json" "https://registry.hub.docker.com/u/finnyapp/finny-api/trigger/$DOCKER_TOKEN/"
-  stage: deploy
+  stage: build
