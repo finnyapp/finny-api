@@ -1,8 +1,5 @@
 image: clojure:lein-2.7.1
 
-services:
-  - postgres:latest
-
 variables:
   POSTGRES_DB: nice_marmot
   POSTGRES_USER: runner
@@ -24,6 +21,8 @@ unit-test:
   stage: test
 
 db-migration-test:
+  services:
+    - postgres:latest
   script:
   - DATABASE_URL=$POSTGRES_URL lein migratus migrate
   - DATABASE_URL=$POSTGRES_URL lein migratus reset
