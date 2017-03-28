@@ -8,11 +8,19 @@
   (let [record (select-keys transaction [:value :comments :category :date :type])]
     (db/create-transaction record)))
 
+(defn values-by-type [transactions]
+  (reduce-kv
+    (fn [m k v]
+      (assoc m k
+             (reduce + (map #(get % :value) v))))
+    {}
+    (group-by :type transactions)))
+
 (defn total-value-of-transactions []
-  (let [transactions (db/get-transactions {})]
+  (let [transactions (db/get-transactions {})
+        groups (values-by-type transactions)]
     (log/debug "Getting total of transactions")
-    (reduce + (map #(cond (= (:type %) "income") (:value %)
-                          (= (:type %) "expense") (- (:value %))) transactions))))
+    (- (get groups "income") (get groups "expense"))))
 
 (defn get-transaction [id]
   (log/debug "Getting transaction with id" id)
