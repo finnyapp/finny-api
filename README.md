@@ -1,6 +1,6 @@
 # finny-api
 
-[![Build Status](https://snap-ci.com/finnyapp/finny-api/branch/master/build_image)](https://snap-ci.com/finnyapp/finny-api/branch/master)
+[![pipeline status](https://gitlab.com/finnyapp/finny-api/badges/master/pipeline.svg)](https://gitlab.com/finnyapp/finny-api/commits/master)
 [![Stories in Ready](https://badge.waffle.io/finnyapp/finny-api.png?label=ready&title=Ready)](https://waffle.io/finnyapp/finny-api)
 [![Dependencies Status](https://jarkeeper.com/finnyapp/finny-api/status.svg)](https://jarkeeper.com/finnyapp/finny-api)
 
