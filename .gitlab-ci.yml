@@ -54,6 +54,8 @@ build-docker-image:
   before_script:
     - docker info
   script:
+    - apt-get update -qy
+    - apt-get install -y curl
     - docker build -t finny/finny-api .
     - docker run -e FINNY_ENV=test -t --rm --name finny-api finny/finny-api lein unit-tests
     - curl -XPOST -H "Content-Type:\ application/json" "https://registry.hub.docker.com/u/finnyapp/finny-api/trigger/$DOCKER_TOKEN/"
